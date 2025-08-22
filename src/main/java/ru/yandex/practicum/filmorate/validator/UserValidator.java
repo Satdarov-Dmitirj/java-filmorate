@@ -3,30 +3,31 @@ package ru.yandex.practicum.filmorate.validator;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+
 import java.time.LocalDate;
 
 @Slf4j
 public class UserValidator {
 
     public static void validate(User user) {
-        if (user.getEmail() == null || !user.getEmail().contains("@")) {
-            log.warn("Ошибка валидации email: {}", user.getEmail());
-            throw new ValidationException("Email должен содержать символ @ и не должен быть пустым");
-        }
-
         if (user.getLogin() == null || user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            log.warn("Ошибка валидации логина: {}", user.getLogin());
+            log.warn("Ошибка: логин пустой или содержит пробелы");
             throw new ValidationException("Логин не может быть пустым и содержать пробелы");
         }
 
-        if (user.getName() == null || user.getName().isBlank()) {
-            log.info("Имя пользователя пустое, используется логин: {}", user.getLogin());
-            user.setName(user.getLogin());
+        if (user.getEmail() == null || !user.getEmail().contains("@")) {
+            log.warn("Ошибка: некорректный email");
+            throw new ValidationException("Email некорректен");
         }
 
         if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
-            log.warn("Ошибка валидации даты рождения: {}", user.getBirthday());
-            throw new ValidationException("Некорректная дата рождения");
+            log.warn("Ошибка: дата рождения в будущем");
+            throw new ValidationException("Дата рождения не может быть в будущем");
+        }
+
+
+        if (user.getName() == null || user.getName().isBlank()) {
+            user.setName(user.getLogin());
         }
     }
 }
