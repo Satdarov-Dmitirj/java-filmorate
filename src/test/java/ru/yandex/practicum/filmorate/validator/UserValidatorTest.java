@@ -20,12 +20,24 @@ public class UserValidatorTest {
         user.setBirthday(LocalDate.of(2000, 1, 1));
 
         UserValidator.validate(user);
+        assertEquals("User", user.getName());
     }
 
     @Test
     void testEmptyEmailThrowsException() {
         User user = new User();
         user.setEmail("");
+        user.setLogin("user123");
+        user.setName("User");
+        user.setBirthday(LocalDate.of(2000, 1, 1));
+
+        assertThrows(ValidationException.class, () -> UserValidator.validate(user));
+    }
+
+    @Test
+    void testNullEmailThrowsException() {
+        User user = new User();
+        user.setEmail(null);
         user.setLogin("user123");
         user.setName("User");
         user.setBirthday(LocalDate.of(2000, 1, 1));
@@ -71,7 +83,7 @@ public class UserValidatorTest {
         User user = new User();
         user.setEmail("test@example.com");
         user.setLogin("user123");
-        user.setName("");
+        user.setName(""); // пустое имя
         user.setBirthday(LocalDate.of(2000, 1, 1));
 
         UserValidator.validate(user);

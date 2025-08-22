@@ -15,7 +15,7 @@ public class UserValidator {
             throw new ValidationException("Логин не может быть пустым и содержать пробелы");
         }
 
-        if (user.getEmail() == null || !user.getEmail().contains("@")) {
+        if (user.getEmail() == null || user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
             log.warn("Ошибка: некорректный email");
             throw new ValidationException("Email некорректен");
         }
@@ -25,9 +25,9 @@ public class UserValidator {
             throw new ValidationException("Дата рождения не может быть в будущем");
         }
 
-
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
     }
 }
+
