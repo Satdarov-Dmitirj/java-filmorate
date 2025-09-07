@@ -3,6 +3,8 @@ package ru.yandex.practicum.filmorate.model;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import java.time.LocalDate;
+import java.util.Set;
+import java.util.HashSet;
 
 @Data
 public class Film {
@@ -19,6 +21,9 @@ public class Film {
 
     @Positive(message = "Продолжительность фильма не может быть меньше нуля")
     private int duration;
+
+    // новое поле для лайков
+    private Set<Integer> likes = new HashSet<>();
 
     public void validateReleaseDate() {
         LocalDate earliestDate = LocalDate.of(1895, 12, 28);
