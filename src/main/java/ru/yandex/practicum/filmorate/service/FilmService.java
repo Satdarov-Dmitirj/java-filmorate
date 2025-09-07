@@ -20,11 +20,27 @@ public class FilmService {
     }
 
     public void addLike(int filmId, int userId) {
-        filmStorage.getFilmById(filmId).getLikes().add(userId);
+        if (!filmStorage.getAllFilms().stream().anyMatch(f -> f.getId() == filmId)) {
+            throw new NoSuchElementException("Фильм с id=" + filmId + " не найден");
+        }
+        if (!userStorage.getAllUsers().stream().anyMatch(u -> u.getId() == userId)) {
+            throw new NoSuchElementException("Пользователь с id=" + userId + " не найден");
+        }
+
+        Film film = filmStorage.getFilmById(filmId);
+        film.getLikes().add(userId);
     }
 
     public void removeLike(int filmId, int userId) {
-        filmStorage.getFilmById(filmId).getLikes().remove(userId);
+        if (!filmStorage.getAllFilms().stream().anyMatch(f -> f.getId() == filmId)) {
+            throw new NoSuchElementException("Фильм с id=" + filmId + " не найден");
+        }
+        if (!userStorage.getAllUsers().stream().anyMatch(u -> u.getId() == userId)) {
+            throw new NoSuchElementException("Пользователь с id=" + userId + " не найден");
+        }
+
+        Film film = filmStorage.getFilmById(filmId);
+        film.getLikes().remove(userId);
     }
 
     public List<Film> getPopularFilms(int count) {
