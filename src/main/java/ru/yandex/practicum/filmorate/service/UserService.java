@@ -8,7 +8,6 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ru.yandex.practicum.filmorate.model.Friendship.FriendshipStatus.CONFIRMED;
 import static ru.yandex.practicum.filmorate.model.Friendship.FriendshipStatus.UNCONFIRMED;
 
 @Service
