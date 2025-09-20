@@ -2,9 +2,10 @@ package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
+
 import java.time.LocalDate;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 @Data
 public class Film {
@@ -22,7 +23,11 @@ public class Film {
     @Positive(message = "Продолжительность фильма не может быть меньше нуля")
     private int duration;
 
-    // новое поле для лайков
+    @NotNull
+    private MpaRating mpa;
+
+    private Set<Genre> genres = new HashSet<>();
+
     private Set<Integer> likes = new HashSet<>();
 
     public void validateReleaseDate() {
@@ -32,5 +37,17 @@ public class Film {
                     "Дата релиза не может быть раньше 28 декабря 1895 года"
             );
         }
+    }
+
+    @Data
+    public static class MpaRating {
+        private int id;
+        private String name;
+    }
+
+    @Data
+    public static class Genre {
+        private int id;
+        private String name;
     }
 }
