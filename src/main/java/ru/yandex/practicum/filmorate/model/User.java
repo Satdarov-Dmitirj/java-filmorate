@@ -1,11 +1,11 @@
 package ru.yandex.practicum.filmorate.model;
 
-import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import jakarta.validation.constraints.*;
 
 @Data
 public class User {
@@ -25,16 +25,5 @@ public class User {
     @PastOrPresent(message = "Дата рождения не может быть в будущем")
     private LocalDate birthday;
 
-    private Set<Friendship> friends = new HashSet<>();
-
-    @Data
-    public static class Friendship {
-        private int friendId;
-        private FriendshipStatus status;
-
-        public enum FriendshipStatus {
-            UNCONFIRMED,
-            CONFIRMED
-        }
-    }
+    private Set<Friendship> friends = new HashSet<>(); // Обратите внимание — это Set<Friendship>
 }

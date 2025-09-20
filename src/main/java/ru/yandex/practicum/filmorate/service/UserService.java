@@ -8,8 +8,6 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ru.yandex.practicum.filmorate.model.Friendship.FriendshipStatus.UNCONFIRMED;
-
 @Service
 public class UserService {
 
@@ -23,11 +21,8 @@ public class UserService {
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
 
-        if (user == null || friend == null)
-            throw new NoSuchElementException("Пользователь не найден");
-
-        user.getFriends().add(new Friendship(userId, friendId, UNCONFIRMED));
-        friend.getFriends().add(new Friendship(friendId, userId, UNCONFIRMED));
+        user.getFriends().add(new Friendship(userId, friendId, Friendship.FriendshipStatus.UNCONFIRMED));
+        friend.getFriends().add(new Friendship(friendId, userId, Friendship.FriendshipStatus.UNCONFIRMED));
     }
 
     public void removeFriend(int userId, int friendId) {
