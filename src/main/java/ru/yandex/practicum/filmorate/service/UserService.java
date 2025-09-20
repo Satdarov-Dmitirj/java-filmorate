@@ -1,11 +1,15 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.model.Friendship;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static ru.yandex.practicum.filmorate.model.Friendship.FriendshipStatus.CONFIRMED;
+import static ru.yandex.practicum.filmorate.model.Friendship.FriendshipStatus.UNCONFIRMED;
 
 @Service
 public class UserService {
@@ -20,22 +24,25 @@ public class UserService {
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
 
-        user.getFriends().add(friend.getId());
-        friend.getFriends().add(user.getId());
+        if (user == null || friend == null)
+            throw new NoSuchElementException("Пользователь не найден");
+
+        user.getFriends().add(new Friendship(userId, friendId, UNCONFIRMED));
+        friend.getFriends().add(new Friendship(friendId, userId, UNCONFIRMED));
     }
 
     public void removeFriend(int userId, int friendId) {
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
 
-        user.getFriends().remove(friend.getId());
-        friend.getFriends().remove(user.getId());
+        user.getFriends().removeIf(f -> f.getFriendId() == friendId);
+        friend.getFriends().removeIf(f -> f.getFriendId() == userId);
     }
 
     public List<User> getFriends(int userId) {
         User user = userStorage.getUserById(userId);
         return user.getFriends().stream()
-                .map(userStorage::getUserById)
+                .map(f -> userStorage.getUserById(f.getFriendId()))
                 .collect(Collectors.toList());
     }
 
@@ -43,8 +50,13 @@ public class UserService {
         User user = userStorage.getUserById(userId);
         User other = userStorage.getUserById(otherId);
 
-        Set<Integer> commonIds = new HashSet<>(user.getFriends());
-        commonIds.retainAll(other.getFriends());
+        Set<Integer> commonIds = user.getFriends().stream()
+                .map(Friendship::getFriendId)
+                .collect(Collectors.toSet());
+
+        commonIds.retainAll(other.getFriends().stream()
+                .map(Friendship::getFriendId)
+                .collect(Collectors.toSet()));
 
         return commonIds.stream()
                 .map(userStorage::getUserById)

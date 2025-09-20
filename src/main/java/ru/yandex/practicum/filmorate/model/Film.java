@@ -24,9 +24,9 @@ public class Film {
 
     private MpaRating mpaRating;
 
-    private Set<Genre> genres = new HashSet<>();
+    private Set<String> genres = new HashSet<>();
 
-    private Set<Like> likes = new HashSet<>();
+    private Set<Integer> likes = new HashSet<>();
 
     public void validateReleaseDate() {
         LocalDate earliestDate = LocalDate.of(1895, 12, 28);
@@ -35,5 +35,9 @@ public class Film {
                     "Дата релиза не может быть раньше 28 декабря 1895 года"
             );
         }
+    }
+
+    public enum MpaRating {
+        G, PG, PG_13, R, NC_17
     }
 }

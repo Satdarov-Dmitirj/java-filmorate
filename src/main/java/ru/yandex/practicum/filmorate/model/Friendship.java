@@ -12,4 +12,10 @@ public class Friendship {
         UNCONFIRMED,
         CONFIRMED
     }
+
+    public Friendship(int userId, int friendId, FriendshipStatus status) {
+        this.userId = userId;
+        this.friendId = friendId;
+        this.status = status;
+    }
 }

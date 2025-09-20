@@ -20,26 +20,22 @@ public class FilmService {
     }
 
     public void addLike(int filmId, int userId) {
-        if (!filmStorage.getAllFilms().stream().anyMatch(f -> f.getId() == filmId)) {
-            throw new NoSuchElementException("Фильм с id=" + filmId + " не найден");
-        }
-        if (!userStorage.getAllUsers().stream().anyMatch(u -> u.getId() == userId)) {
-            throw new NoSuchElementException("Пользователь с id=" + userId + " не найден");
-        }
-
         Film film = filmStorage.getFilmById(filmId);
+        if (film == null) throw new NoSuchElementException("Фильм не найден");
+
+        if (userStorage.getUserById(userId) == null)
+            throw new NoSuchElementException("Пользователь не найден");
+
         film.getLikes().add(userId);
     }
 
     public void removeLike(int filmId, int userId) {
-        if (!filmStorage.getAllFilms().stream().anyMatch(f -> f.getId() == filmId)) {
-            throw new NoSuchElementException("Фильм с id=" + filmId + " не найден");
-        }
-        if (!userStorage.getAllUsers().stream().anyMatch(u -> u.getId() == userId)) {
-            throw new NoSuchElementException("Пользователь с id=" + userId + " не найден");
-        }
-
         Film film = filmStorage.getFilmById(filmId);
+        if (film == null) throw new NoSuchElementException("Фильм не найден");
+
+        if (userStorage.getUserById(userId) == null)
+            throw new NoSuchElementException("Пользователь не найден");
+
         film.getLikes().remove(userId);
     }
 
